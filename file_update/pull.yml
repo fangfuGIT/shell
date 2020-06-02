@@ -1,0 +1,16 @@
+---
+- name: getSysinitlist 
+  hosts: all
+  no_log: true
+  vars_files: 
+    - vars/openarea_vars.yml
+  tasks:
+
+    - name: pull pull.txt 
+      fetch: src=/tmp/{{ item }} dest=. fail_on_missing=yes
+      with_items:
+         - imchat-deliver-1.0-SNAPSHOT.jar
+    # - name: rm sys_init_list.txt
+    #   file: path=/tmp/{{ item }} state=absent
+    #   with_items: 
+    #     - sys_init_list.txt

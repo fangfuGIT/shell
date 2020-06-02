@@ -1,0 +1,24 @@
+---
+- hosts: 
+  - "{{ serverhost }}"
+  become: yes
+  tasks:
+   - name: judge whether the bk_jar exists
+     shell: ls {{ serverPath }}bk_jar
+     ignore_errors: True
+     register: result
+   - name: mkdir bk_jar if not exists
+     file: path={{ serverPath }}bk_jar state=directory
+     when: result is failed
+   - name: judge whether the {{ file }} exists
+     shell: ls {{ serverPath }}{{ file }}
+   - name: backup file
+     shell: cp {{ serverPath }}{{ file }} {{ serverPath }}bk_jar/{{ file }}_{{ nowdata }}
+   - name: push file to server
+     copy: src={{ file }} dest={{ serverPath }}
+   - name: stop services
+     shell: sh {{ serverPath }}stop.sh
+   - name: wait stop services
+     shell: sleep 3
+   - name: start services
+     shell: sh {{ serverPath }}start.sh

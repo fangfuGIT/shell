@@ -1,0 +1,16 @@
+---
+- hosts: 
+  - source_ali
+
+  tasks:
+    - name: judge whether the manage.zip exists
+      shell: ls {{ path }}{{ file }}
+    - name: unzip manage.zip
+      shell: cd {{ path }} && unzip -o {{ file }}
+    - name: copy to manage dir
+      shell: cd {{ path }} && rsync -av --exclude {{ file }} * /opt/netty/manage
+    - name: rm unzip files
+      shell: find {{ path }}*|grep -v {{ file }}|xargs rm -rf
+
+
+

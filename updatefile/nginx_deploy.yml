@@ -1,0 +1,20 @@
+---
+- hosts: 
+  - "{{ serverhost }}"
+  become: yes
+  tasks:
+   - name: judge whether the {{ fileA }} exists
+     shell: ls {{ serverPath }}{{ fileA }}
+   - name: judge whether the {{ fileB }} exists
+     shell: ls {{ serverPath }}{{ fileB }}
+
+   - name: backup {{ fileA }}
+     shell: mv {{ serverPath }}{{ fileA }} {{ serverPath }}{{ fileA }}_bbak
+   - name: backup {{ fileB }}
+     shell: mv {{ serverPath }}{{ fileB }} {{ serverPath }}{{ fileB }}_bbak
+   - name: push {{ fileA }} to server
+     copy: src={{ fileA }} dest={{ serverPath }}
+   - name: push {{ fileB }} to server
+     copy: src={{ fileB }} dest={{ serverPath }}
+   - name: reload nginx
+     shell: nginx -s reload

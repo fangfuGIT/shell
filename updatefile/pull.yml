@@ -1,0 +1,9 @@
+---
+- hosts: 
+  - source_ali
+
+  tasks:
+    - name: pull file from aliyun_server
+      fetch: src={{ path }}{{ file }} dest=. fail_on_missing=yes
+
+
